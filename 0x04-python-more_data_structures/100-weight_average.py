@@ -20,4 +20,4 @@ def weight_average(my_list=[]):
         else:
             numerator += mult
 
-     return numerator / denominator        
+     return numerator / denominator
