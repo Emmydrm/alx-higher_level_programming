@@ -28,38 +28,27 @@ void print_python_float(PyObject *p)
  */
 void print_python_bytes(PyObject *p)
 {
-	ssize_t i;
-	ssize_t size;
-	char *string;
-	int current;
+	Py_ssize_t size = 0, i = 0;
+	char *string = NULL;
 
+	fflush(stdout);
 	printf("[.] bytes object info\n");
-	if (!PyBytes_Check(p))
+	if (!PyBytes_CheckExact(p))
 	{
 		printf("  [ERROR] Invalid Bytes Object\n");
 		return;
 	}
-	size = (ssize_t)PyBytes_Size(p);
-	string = (char *)((PyBytesObject *)p)->ob_sval;
+	size = PyBytes_Size(p);
 	printf("  size: %zd\n", size);
+	string = (assert(PyBytes_Check(p)), (((PyBytesObject *)(p))->ob_sval));
 	printf("  trying string: %s\n", string);
-	if (size > 10)
-		size = 10;
-	else
-		size++;
-	printf("  first %zd bytes: ", size);
-	for (i = 0; i < size; i++)
+	printf("  first %zd bytes:", size < 10 ? size + 1 : 10);
+	while (i < size + 1 && i < 10)
 	{
-		current = string[i];
-		if (current >= 0 && current < 16)
-			printf("0%x", current);
-		else
-			printf("%hhx", current);
-		if (i < size - 1)
-			printf(" ");
+		printf(" %02hhx", string[i]);
+		i++;
 	}
 	printf("\n");
-	fflush(stdout);
 }
 
 /**
