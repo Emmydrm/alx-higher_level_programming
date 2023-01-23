@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 def safe_print_integer(value):
-    try:
-        print("{:d}".format(value))
-        return True
-     except (ValueError, TypeError):
-         return False
+    ret = 0
+    for i in range(0, x):
+        try:
+            print("{:d}".format(my_list[i]), end="")
+            ret += 1
+        except (ValueError, TypeError):
+            continue
+    print("")
+    return (ret)
