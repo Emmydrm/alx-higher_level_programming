@@ -68,31 +68,28 @@ void print_python_bytes(PyObject *p)
  */
 void print_python_list(PyObject *p)
 {
-	PyListObject *listobj;
-	PyObject *obj;
-	const char *type;
-	ssize_t i;
+	Py_ssize_t size = 0;
+	PyObject *item;
+	int i = 0;
 
-	if (!p)
-		return;
-	listobj = (PyListObject *)p;
+	fflush(stdout);
 	printf("[*] Python list info\n");
-	if (!PyList_Check(p))
+	if (PyList_CheckExact(p))
 	{
+		size = PyList_GET_SIZE(p);
+		printf("[*] Size of the Python List = %zd\n", size);
+		printf("[*] Allocated = %lu\n", ((PyListObject *)p)->allocated);
+		while (i < size)
+		{
+			item = PyList_GET_ITEM(p, i);
+			printf("Element %d: %s\n", i, item->ob_type->tp_name);
+			if (PyBytes_Check(item))
+				print_python_bytes(item);
+			else if (PyFloat_Check(item))
+				print_python_float(item);
+			i++;
+		}
+	}
+	else
 		printf("  [ERROR] Invalid List Object\n");
-		return;
-	}
-	printf("[*] Size of the Python List = %d\n", (int)PyList_GET_SIZE(p));
-	printf("[*] Allocated = %d\n", (int)listobj->allocated);
-	for (i = 0; i < PyList_GET_SIZE(p); i++)
-	{
-		obj = listobj->ob_item[i];
-		type = obj->ob_type->tp_name;
-		printf("Element %zd: %s\n", i, type);
-		if (PyBytes_Check(obj))
-			print_python_bytes((PyObject *)obj);
-		if (PyFloat_Check(obj))
-			print_python_float((PyObject *)obj);
-		fflush(stdout);
-	}
 }
