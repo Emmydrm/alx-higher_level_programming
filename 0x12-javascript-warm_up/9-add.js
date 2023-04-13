@@ -1,11 +1,12 @@
 #!/usr/bin/node
 
-const args = process.argv;
-
 function add (a, b) {
 	console.log(a + b);
 }
-
-const first = parseInt(args[2]);
-const second = parseInt(args[3]);
-add(first, second);
+if (isNaN(process.argv[2])) {
+	console.log('NaN');
+} else if (isNaN(process.argv[3])) {
+	console.log('NaN');
+} else {
+	add(parseInt(process.argv[2]), parseInt(process.argv[3]));
+}
