@@ -14,16 +14,18 @@ def connectToDB():
             passwd=sys.argv[2], db=sys.argv[3])
     cur = db.cursor()
     cur.execute("SELECT cities.name \
-            FROM cities \
-            INNER JOIN states \
-            ON cities.state_id = states.id \
-            WHERE states.name = %s \
-            ORDER BY cities.id", [sys.argv[4]])
+                 FROM cities \
+                 INNER JOIN states \
+                 ON cities.state_id = states.id \
+                 WHERE states.name = %s \
+                 ORDER BY cities.id", [sys.argv[4]])
     rows = cur.fetchall()
     cities = ""
     for item in rows[:-1]:
-        for item in rows[:-1]:
-    print(rows[-1][0])
+        cities += item[0] + ', '
+    cities += rows[-1][0]
+    print(cities)
+
 
 
 if __name__ == "__main__":
